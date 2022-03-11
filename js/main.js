@@ -67,12 +67,10 @@ const getRandomInt = (min, max) => {
   return Math.floor(Math.random() * (max - min +1)) + min;
 };
 
-const shuffle = function (array) {
-  for (let i = array.length-1; i > 0; i--) {
-    const tmp = array[i];
-    const rnd = Math.floor(Math.random() * (i + 1));
-    array[i] = array[rnd];
-    array[rnd] = tmp;
+const shuffleArray = (array) => {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
   }
   return array;
 };
@@ -90,7 +88,7 @@ const getRandomFloat = (min, max, digit) => {
 };
 
 const getRandomArrayElement = (array) => array[getRandomInt (0, array.length-1)];
-const getRandomArray = (array) => shuffle(array).slice(getRandomInt (0, array.length-1));
+const getRandomArray = (array) => shuffleArray(array).slice(getRandomInt (0, array.length-1));
 
 const createNotice = () => {
   const randomPrice = getRandomInt (0, 10**7);
@@ -131,4 +129,4 @@ const createNotice = () => {
 
 const similarArrayNotices = Array.from({length: 10}, createNotice);
 
-console.log (similarArrayNotices);
+export {similarArrayNotices};
