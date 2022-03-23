@@ -1,1 +1,1 @@
-import {createNotices} from './data.js';
+import './card.js';
