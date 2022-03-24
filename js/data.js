@@ -58,16 +58,16 @@ const PHOTOS = [
 ];
 
 const createNotice = () => {
-  const randomPrice = getRandomInt (0, 10**7);
-  const randomRooms = getRandomInt (0, 10);
-  const randomGuests = getRandomInt (0, 10**2);
+  const randomPrice = getRandomInt (1, 2*10**4);
+  const randomRooms = getRandomInt (1, 5);
+  const randomGuests = getRandomInt (1, 30);
   const randomLat = getRandomFloat (35.65000, 35.70000, 5);
   const randomLng = getRandomFloat (139.70000, 139.80000, 5);
 
   const author = {};
   const randomInt = getRandomInt (0, AVATARS.length-1);
   const getRandomNoRepeatArrayElement = (array) => array[randomInt];
-  author.avatar = `img/avatars/user${  getRandomNoRepeatArrayElement(AVATARS)  }.png`;
+  author.avatar = getRandomNoRepeatArrayElement(AVATARS);
   AVATARS.splice(randomInt, 1);
 
   const offer = {};
@@ -94,6 +94,6 @@ const createNotice = () => {
   };
 };
 
-const createNotices = () => Array.from({length: 10}, createNotice);
+const createNotices = (count) => Array.from({length: count}, createNotice);
 
 export {createNotices};
