@@ -5,22 +5,12 @@ const pristine = new Pristine(adForm, {
   errorTextParent: 'validation-check',
 });
 
-// Проверка заполнено ли обязательное поле input title
-function validateRequared (value) {
-  return value.length !== 0;
-}
+Pristine.addMessages('ru', {
+  required: 'Обязательное поле',
+  minlength: 'Длина текста от 30 до 100 символов',
+});
 
-pristine.addValidator(adForm.querySelector('#title'), validateRequared, 'Обязательное для заполнения поле', 3, false);
-
-// Проверка огранечение по длине контента input title
-function validateTitle (value) {
-  return value.length >= 30 && value.length <= 100;
-}
-
-pristine.addValidator(adForm.querySelector('#title'), validateTitle, 'Количество символов от 30 до 100', 2, true);
-
-// Проверка заполнено ли обязательное поле input price
-pristine.addValidator(adForm.querySelector('#price'), validateRequared, 'Обязательное для заполнения поле', 3, false);
+Pristine.setLocale('ru');
 
 // Проверка огранечение по максимальному значению input price
 function validatePrice (value) {
@@ -33,8 +23,11 @@ pristine.addValidator(adForm.querySelector('#price'), validatePrice, 'Макси
 
 adForm.addEventListener('submit', (evt) => {
   evt.preventDefault();
-  if(pristine.validate()) {console.log('Форма отправлена!');
-  } else {console.log('Ошибка в заполнении формы!');}
+  if(pristine.validate()) {
+    console.log('Форма отправлена!');
+  } else {
+    console.log('Ошибка в заполнении формы!');
+  }
 });
 
 //Сценарий получения соответствия количества спальных мест количеству комнат
