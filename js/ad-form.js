@@ -8,27 +8,10 @@ const pristine = new Pristine(adForm, {
 Pristine.addMessages('ru', {
   required: 'Обязательное поле',
   minlength: 'Длина текста от 30 до 100 символов',
+  min: 'Минимум 1000',
 });
 
 Pristine.setLocale('ru');
-
-// Проверка огранечение по максимальному значению input price
-function validatePrice (value) {
-  return value <= 100000;
-}
-
-pristine.addValidator(adForm.querySelector('#price'), validatePrice, 'Максимальное значение 100 000', 2, true);
-
-// Проверка валидности формы при отправке
-
-adForm.addEventListener('submit', (evt) => {
-  evt.preventDefault();
-  if(pristine.validate()) {
-    console.log('Форма отправлена!');
-  } else {
-    console.log('Ошибка в заполнении формы!');
-  }
-});
 
 //Сценарий получения соответствия количества спальных мест количеству комнат
 
@@ -61,3 +44,47 @@ const onRoomNumberChange = () => {
 };
 
 roomNumber.addEventListener('change', onRoomNumberChange);
+
+//Сценарий получения влияния поля «Тип жилья» на минимальное значение поля «Цена за ночь»
+
+const typeSelect = adForm.querySelector('#type');
+const priceInput = adForm.querySelector('#price');
+
+// Проверка огранечение по минимальному значению input price
+
+const priceOfHousing = {
+  'bungalow': '0',
+  'flat': '1000',
+  'hotel': '3000',
+  'house': '5000',
+  'palace': '10000',
+};
+
+typeSelect.addEventListener('change', () => {
+  priceInput.placeholder = priceOfHousing[typeSelect.value];
+  const error = parseInt(priceInput.placeholder, 10);
+
+  // Проверка огранечение по минимальному значению input price
+  function validateMinPrice (value) {
+    return value > error;
+  }
+  pristine.addValidator(priceInput, validateMinPrice, `Минимум ${  error  }`, 2, true);
+});
+
+// Проверка огранечение по максимальному значению input price
+function validateMaxPrice (value) {
+  return value <= 100000;
+}
+
+pristine.addValidator(priceInput, validateMaxPrice, 'Максиму 100 000', 2, true);
+
+// Проверка валидности формы при отправке
+
+adForm.addEventListener('submit', (evt) => {
+  evt.preventDefault();
+  if(pristine.validate()) {
+    console.log('Форма отправлена!');
+  } else {
+    console.log('Ошибка в заполнении формы!');
+  }
+});
