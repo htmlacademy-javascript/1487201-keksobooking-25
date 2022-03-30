@@ -1,5 +1,7 @@
 const adForm = document.querySelector('.ad-form');
 
+const MAXIMUM_VALUE_PRICE = 100000;
+
 const pristine = new Pristine(adForm, {
   classTo: 'validation-check',
   errorTextParent: 'validation-check',
@@ -8,7 +10,8 @@ const pristine = new Pristine(adForm, {
 Pristine.addMessages('ru', {
   required: 'Обязательное поле',
   minlength: 'Длина текста от 30 до 100 символов',
-  min: 'Минимум 1000',
+  // eslint-disable-next-line no-template-curly-in-string
+  min: 'Минимум ${1}',
 });
 
 Pristine.setLocale('ru');
@@ -53,30 +56,56 @@ const priceInput = adForm.querySelector('#price');
 // Проверка огранечение по минимальному значению input price
 
 const priceOfHousing = {
-  'bungalow': '0',
-  'flat': '1000',
-  'hotel': '3000',
-  'house': '5000',
-  'palace': '10000',
+  bungalow: 0,
+  flat: 1000,
+  hotel: 3000,
+  house: 5000,
+  palace: 10000,
 };
+
+// eslint-disable-next-line prefer-template
+const getMinValue = () => 'Минимум ' + priceInput.min;
+
+const validateMinPrice = (value) => parseInt(value, 10) >= parseInt(priceInput.min, 10);
+
+pristine.addValidator(priceInput, validateMinPrice, getMinValue, 2, true);
 
 typeSelect.addEventListener('change', () => {
   priceInput.placeholder = priceOfHousing[typeSelect.value];
-  const error = parseInt(priceInput.placeholder, 10);
-
-  // Проверка огранечение по минимальному значению input price
-  function validateMinPrice (value) {
-    return value > error;
-  }
-  pristine.addValidator(priceInput, validateMinPrice, `Минимум ${  error  }`, 2, true);
+  priceInput.min = priceOfHousing[typeSelect.value];
+  pristine.validate();
 });
 
 // Проверка огранечение по максимальному значению input price
 function validateMaxPrice (value) {
-  return value <= 100000;
+  return value <= MAXIMUM_VALUE_PRICE;
 }
 
-pristine.addValidator(priceInput, validateMaxPrice, 'Максиму 100 000', 2, true);
+pristine.addValidator(priceInput, validateMaxPrice, 'Максимум 100 000', 2, true);
+
+// Синхронизация полей «Время заезда» и «Время выезда»
+const timein = adForm.querySelector('#timein');
+const timeinOptions = timein.querySelectorAll('option');
+
+const timeout = adForm.querySelector('#timeout');
+const timeoutOptions = timeout.querySelectorAll('option');
+
+timein.addEventListener('change', () => {
+  timeoutOptions.forEach((item) => {
+    if(timein.value === item.value) {
+      timeout.value = item.value;
+    }
+  });
+});
+
+timeout.addEventListener('change', () => {
+  timeinOptions.forEach((item) => {
+    if(timeout.value === item.value) {
+      timein.value = item.value;
+    }
+  });
+});
+
 
 // Проверка валидности формы при отправке
 
