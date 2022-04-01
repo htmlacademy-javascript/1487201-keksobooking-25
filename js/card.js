@@ -1,4 +1,3 @@
-const mapCanvas = document.querySelector('#map-canvas');
 const cardTemplate = document.querySelector('#card').content.querySelector('.popup');
 
 const showCard =(card) => {
@@ -101,7 +100,7 @@ const showCard =(card) => {
     photosItems.forEach((photosItem) => {photosList.insertAdjacentHTML('beforeend', `<img src=" ${  photosItem  } " class="popup__photo" width="45" height="40" alt="Фотография жилья"></img>`);
     });}
 
-  mapCanvas.appendChild(mapCanvasElement);
+  return mapCanvasElement;
 };
 
 export {showCard};

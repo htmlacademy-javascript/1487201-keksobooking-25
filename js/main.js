@@ -1,7 +1,8 @@
 import {createNotices} from './data.js';
 import {showCard} from './card.js';
 import './ad-form.js';
+import {getBallons} from './map.js';
+import './change-state-page.js';
+import './slider.js';
 
-const cards = createNotices(10);
-
-showCard(cards[5]);
+getBallons(createNotices(10), showCard);
