@@ -117,3 +117,4 @@ adForm.addEventListener('submit', (evt) => {
     console.log('Ошибка в заполнении формы!');
   }
 });
+
