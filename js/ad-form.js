@@ -1,3 +1,6 @@
+import {sentData} from './api.js';
+import {resetSettingsMap, resetAddress} from './map.js';
+
 const adForm = document.querySelector('.ad-form');
 
 const MAXIMUM_VALUE_PRICE = 100000;
@@ -107,14 +110,38 @@ timeout.addEventListener('change', () => {
 });
 
 
-// Проверка валидности формы при отправке
+// Отправка формы (проверка валидности формы, сброс карты и данных в формы к исходному значению при отправке).
 
-adForm.addEventListener('submit', (evt) => {
-  evt.preventDefault();
-  if(pristine.validate()) {
-    console.log('Форма отправлена!');
-  } else {
-    console.log('Ошибка в заполнении формы!');
-  }
+const resetFormAndMap = () => {
+  resetSettingsMap();
+
+  adForm.reset();
+
+  priceInput.value = priceInput.min;
+
+  resetAddress();
+};
+
+const setUserFormSubmit = (onSuccess, onError) => {
+  adForm.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+    if(pristine.validate()) {
+
+      sentData(onSuccess, onError, new FormData(evt.target));
+
+    }
+  });
+};
+
+// Сброс формы
+
+const adFormReset = adForm.querySelector('.ad-form__reset');
+
+adFormReset.addEventListener('click', () => {
+
+  resetFormAndMap();
 });
+
+
+export {setUserFormSubmit, resetFormAndMap};
 

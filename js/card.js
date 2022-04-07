@@ -9,7 +9,7 @@ const showCard =(card) => {
   if (!card.author.avatar) {
     popupAvatar.classList.add('hidden');
   } else {
-    popupAvatar.src = `img/avatars/user${ card.author.avatar  }.png`;
+    popupAvatar.src = card.author.avatar;
   }
 
   const popupTitle = mapCanvasElement.querySelector('.popup__title');
@@ -72,7 +72,7 @@ const showCard =(card) => {
   const featuresItems = featuresList.querySelectorAll('.popup__feature');
   const features = card.offer.features;
 
-  if (features.length === 0) {featuresList.classList.add('hidden');
+  if (!features) {featuresList.classList.add('hidden');
   } else {
     featuresItems.forEach((featuresItem) => {
       const isNecessary = features.some((feature) => featuresItem.classList.contains(`popup__feature--${  feature}`));
@@ -83,7 +83,7 @@ const showCard =(card) => {
 
   const popupDescription = mapCanvasElement.querySelector('.popup__description');
 
-  if (card.offer.description.length === 0) {
+  if (!card.offer.description) {
     popupDescription.classList.add('hidden');
   } else {
     popupDescription.textContent = card.offer.description;
@@ -94,7 +94,7 @@ const showCard =(card) => {
 
   photosList.innerHTML = ' ';
 
-  if (photosItems.length === 0) {
+  if (!photosItems) {
     photosList.classList.add('hidden');
   } else {
     photosItems.forEach((photosItem) => {photosList.insertAdjacentHTML('beforeend', `<img src=" ${  photosItem  } " class="popup__photo" width="45" height="40" alt="Фотография жилья"></img>`);

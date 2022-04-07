@@ -1,30 +1,23 @@
-/*
-import {map} from './map.js';
-
 const adForm = document.querySelector('.ad-form');
-const childrenAdForm = Array.from(adForm.children);
 const mapFilters = document.querySelector('.map__filters');
-const childrenMapFilters = Array.from(mapFilters.children);
+const formFields = document.querySelectorAll('fieldset, .map__filter');
 
-adForm.classList.add('ad-form--disabled');
+const setDisableState = () => {
+  formFields.forEach((item) => {
+    item.disabled = !item.disabled;
+  });
+};
 
-childrenAdForm.forEach((child) => {child.disabled = true;});
+const setDisabledForm = () => {
+  setDisableState();
+  adForm.classList.add('ad-form--disabled');
+  mapFilters.classList.add('map__filters--disabled');
+};
 
-mapFilters.classList.add('map__filters--disabled');
-
-childrenMapFilters.forEach((child) => {child.disabled = true;});
-
-
-map.on('load', () => {
-  console.log('Карта загрузилась');
-
+const setAktiveForm = () => {
+  setDisableState();
   adForm.classList.remove('ad-form--disabled');
-
-  childrenAdForm.forEach((child) => {child.disabled = false;});
-
   mapFilters.classList.remove('map__filters--disabled');
+};
 
-  childrenMapFilters.forEach((child) => {child.disabled = false;});
-});
-*/
-
+export {setDisabledForm, setAktiveForm};
