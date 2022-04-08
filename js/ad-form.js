@@ -1,5 +1,5 @@
-import {sentData} from './api.js';
 import {resetSettingsMap, resetAddress} from './map.js';
+import {request} from './api.js';
 
 const adForm = document.querySelector('.ad-form');
 
@@ -127,7 +127,7 @@ const setUserFormSubmit = (onSuccess, onError) => {
     evt.preventDefault();
     if(pristine.validate()) {
 
-      sentData(onSuccess, onError, new FormData(evt.target));
+      request(onSuccess, onError, 'POST', new FormData(evt.target));
 
     }
   });

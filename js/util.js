@@ -1,5 +1,7 @@
 const ALERT_SHOW_TIME = 2000;
 
+const ERRORMESSAGE = 'Данные с сервера не загрузились. Попробуйте обновить страницу.';
+
 const getRandomInt = (min, max) => {
   if (min < 0 || max < 0) {
     return -1;
@@ -37,7 +39,7 @@ const getRandomArray = (array) => shuffleArray(array).slice(getRandomInt (0, arr
 
 const isEscapeKey = (evt) => evt.key === 'Escape';
 
-const showAlert = (message) => {
+const showAlert = () => {
   const alertContainer = document.createElement('div');
   alertContainer.style.zIndex = 100;
   alertContainer.style.position = 'absolute';
@@ -49,7 +51,7 @@ const showAlert = (message) => {
   alertContainer.style.textAlign = 'center';
   alertContainer.style.backgroundColor = 'red';
 
-  alertContainer.textContent = message;
+  alertContainer.textContent = ERRORMESSAGE;
 
   document.body.append(alertContainer);
 
