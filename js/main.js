@@ -1,8 +1,11 @@
-import {createNotices} from './data.js';
-import {showCard} from './card.js';
 import './ad-form.js';
-import {getBallons} from './map.js';
-import './change-state-page.js';
 import './slider.js';
+import {getBallons} from './map.js';
+import {request} from './api.js';
+import {showModalWindowSuccess, showModalWindowError} from './modal-windows.js';
+import {setUserFormSubmit} from './ad-form.js';
+import {showAlert} from './util.js';
 
-getBallons(createNotices(10), showCard);
+request(getBallons, showAlert, 'GET');
+
+setUserFormSubmit(showModalWindowSuccess, showModalWindowError);
