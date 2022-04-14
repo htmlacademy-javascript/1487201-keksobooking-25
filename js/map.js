@@ -1,7 +1,10 @@
 import {setDisabledForm, setAktiveForm} from './change-state-page.js';
-
+import {filterData} from './filter.js';
+import {debounce} from './util.js';
 import {showCard} from './card.js';
-//Создание карты и меток
+
+const MAX_OFFERS = 10;
+const RERENDER_DELAY = 500;
 
 const settingsMap = {
   lat: 35.6894875,
@@ -33,6 +36,10 @@ const settingsPin = {
 };
 
 const adForm = document.querySelector('.ad-form');
+
+const mapFilters = document.querySelector('.map__filters');
+
+let adverts = [];
 
 setDisabledForm();
 
@@ -85,31 +92,50 @@ mainPinMarker.on('moveend', (evt) => {
   address.value = `${parseFloat(evt.target.getLatLng().lat.toFixed(5))}, ${parseFloat(evt.target.getLatLng().lng.toFixed(5))}`;
 });
 
-//Генерация меток объявлений на карте
-
 const icon = L.icon({
   iconUrl: settingsPin.iconUrl,
   iconSize: [settingsPin.iconWidth, settingsPin.iconHeyght],
   iconAnchor: [settingsPin.anchorAxisOx, settingsPin.anchorAxisOy],
 });
 
-const getBallons = (arrayCards) => {
+const markerGroup = L.layerGroup().addTo(map);
 
+const createMarker = (arrayCard) => {
+  const marker = L.marker(
+    {
+      lat: arrayCard.location.lat,
+      lng: arrayCard.location.lng,
+    },
+    {
+      icon,
+    });
+
+  marker
+    .addTo(markerGroup)
+    .bindPopup(showCard(arrayCard));
+};
+
+const createMarkerGroup = (arrayCards) => {
   arrayCards.forEach((arrayCard) => {
-    const marker = L.marker(
-      {
-        lat: arrayCard.location.lat,
-        lng: arrayCard.location.lng,
-      },
-      {
-        icon,
-      });
-
-    marker.addTo(map).bindPopup(showCard(arrayCard));
+    createMarker(arrayCard);
   });
 };
 
-//Функция сброса карты и главной метки к начальным настройкам
+
+const onMapFiltersChange = () => {
+  markerGroup.clearLayers();
+  createMarkerGroup(filterData(adverts));
+};
+
+
+const getBallons = (arrayCards) => {
+
+  adverts = arrayCards.slice();
+
+  createMarkerGroup(adverts.slice(0, MAX_OFFERS));
+
+  mapFilters.addEventListener('change', debounce(onMapFiltersChange, RERENDER_DELAY));
+};
 
 const resetSettingsMap = () => {
 
@@ -128,42 +154,3 @@ const resetSettingsMap = () => {
 };
 
 export {getBallons, resetSettingsMap, resetAddress};
-
-/*
-import {createNotices} from './data.js';
-import {showCard} from './card.js';
-
-const cards = createNotices(10);
-
-cards.forEach((card) => {
-  const marker = L.marker(
-    {
-      lat: card.location.lat,
-      lng: card.location.lng,
-    },
-    {
-      icon,
-    });
-
-  marker.addTo(map).bindPopup(showCard(card));
-});
-*/
-/*
-const getBallons = (arrayCards, createPopup) => {
-
-  arrayCards.forEach((arrayCard) => {
-    const marker = L.marker(
-      {
-        lat: arrayCard.location.lat,
-        lng: arrayCard.location.lng,
-      },
-      {
-        icon,
-      });
-
-    marker.addTo(map).bindPopup(createPopup(arrayCard));
-  });
-};
-
-export {map, getBallons};
-*/
