@@ -73,9 +73,7 @@ typeSelect.addEventListener('change', () => {
   pristine.validate();
 });
 
-function validateMaxPrice (value) {
-  return value <= MAXIMUM_VALUE_PRICE;
-}
+const validateMaxPrice = (value) => value <= MAXIMUM_VALUE_PRICE;
 
 pristine.addValidator(priceInput, validateMaxPrice, 'Максимум 100 000', 2, true);
 
