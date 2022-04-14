@@ -19,8 +19,6 @@ Pristine.addMessages('ru', {
 
 Pristine.setLocale('ru');
 
-//Сценарий получения соответствия количества спальных мест количеству комнат
-
 const capacitySelect = adForm.querySelector('#capacity');
 const guestNumber = capacitySelect.querySelectorAll('option');
 const roomNumber = adForm.querySelector('#room_number');
@@ -51,12 +49,8 @@ const onRoomNumberChange = () => {
 
 roomNumber.addEventListener('change', onRoomNumberChange);
 
-//Сценарий получения влияния поля «Тип жилья» на минимальное значение поля «Цена за ночь»
-
 const typeSelect = adForm.querySelector('#type');
 const priceInput = adForm.querySelector('#price');
-
-// Проверка огранечение по минимальному значению input price
 
 const priceOfHousing = {
   bungalow: 0,
@@ -79,14 +73,10 @@ typeSelect.addEventListener('change', () => {
   pristine.validate();
 });
 
-// Проверка огранечение по максимальному значению input price
-function validateMaxPrice (value) {
-  return value <= MAXIMUM_VALUE_PRICE;
-}
+const validateMaxPrice = (value) => value <= MAXIMUM_VALUE_PRICE;
 
 pristine.addValidator(priceInput, validateMaxPrice, 'Максимум 100 000', 2, true);
 
-// Синхронизация полей «Время заезда» и «Время выезда»
 const timein = adForm.querySelector('#timein');
 const timeinOptions = timein.querySelectorAll('option');
 
@@ -109,9 +99,6 @@ timeout.addEventListener('change', () => {
   });
 });
 
-
-// Отправка формы (проверка валидности формы, сброс карты и данных в формы к исходному значению при отправке).
-
 const resetFormAndMap = () => {
   resetSettingsMap();
 
@@ -133,15 +120,12 @@ const setUserFormSubmit = (onSuccess, onError) => {
   });
 };
 
-// Сброс формы
-
 const adFormReset = adForm.querySelector('.ad-form__reset');
 
 adFormReset.addEventListener('click', () => {
 
   resetFormAndMap();
 });
-
 
 export {setUserFormSubmit, resetFormAndMap};
 
