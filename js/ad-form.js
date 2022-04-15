@@ -1,5 +1,6 @@
 import {resetSettingsMap, resetAddress} from './map.js';
 import {request} from './api.js';
+import {sliderElement, valueElement} from './slider.js';
 
 const adForm = document.querySelector('.ad-form');
 
@@ -107,6 +108,8 @@ const resetFormAndMap = () => {
   priceInput.value = priceInput.min;
 
   resetAddress();
+
+  sliderElement.noUiSlider.set(valueElement.value);
 };
 
 const setUserFormSubmit = (onSuccess, onError) => {

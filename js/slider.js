@@ -41,3 +41,5 @@ if(adForm.classList.contains('ad-form--disabled')) {
     keyboardSupport: false,
   });
 }
+
+export {sliderElement, valueElement};
