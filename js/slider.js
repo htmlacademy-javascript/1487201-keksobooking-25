@@ -21,12 +21,6 @@ sliderElement.noUiSlider.on('update', () => {
   valueElement.value = sliderElement.noUiSlider.get();
 });
 
-typeOfHousing.addEventListener('change', () => {
-  sliderElement.noUiSlider.updateOptions({
-    start: valueElement.min,
-  });
-});
-
 valueElement.addEventListener('blur', () => {
   sliderElement.noUiSlider.updateOptions({
     start: valueElement.value,

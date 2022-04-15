@@ -1,6 +1,6 @@
 import {resetSettingsMap, resetAddress} from './map.js';
 import {request} from './api.js';
-import {sliderElement, valueElement} from './slider.js';
+import {sliderElement} from './slider.js';
 
 const adForm = document.querySelector('.ad-form');
 
@@ -61,18 +61,25 @@ const priceOfHousing = {
   palace: 10000,
 };
 
+typeSelect.addEventListener('change', () => {
+
+  priceInput.placeholder = priceOfHousing[typeSelect.value];
+
+  priceInput.min = priceOfHousing[typeSelect.value];
+
+  priceInput.value = priceInput.min;
+
+  sliderElement.noUiSlider.updateOptions({
+    start: priceInput.min,
+  });
+});
+
 // eslint-disable-next-line prefer-template
 const getMinValue = () => 'Минимум ' + priceInput.min;
 
 const validateMinPrice = (value) => parseInt(value, 10) >= parseInt(priceInput.min, 10);
 
 pristine.addValidator(priceInput, validateMinPrice, getMinValue, 2, true);
-
-typeSelect.addEventListener('change', () => {
-  priceInput.placeholder = priceOfHousing[typeSelect.value];
-  priceInput.min = priceOfHousing[typeSelect.value];
-  pristine.validate();
-});
 
 const validateMaxPrice = (value) => value <= MAXIMUM_VALUE_PRICE;
 
@@ -105,11 +112,13 @@ const resetFormAndMap = () => {
 
   adForm.reset();
 
+  priceInput.min = priceOfHousing[typeSelect.value];
+
   priceInput.value = priceInput.min;
 
   resetAddress();
 
-  sliderElement.noUiSlider.set(valueElement.value);
+  sliderElement.noUiSlider.set(priceInput.value);
 };
 
 const setUserFormSubmit = (onSuccess, onError) => {
