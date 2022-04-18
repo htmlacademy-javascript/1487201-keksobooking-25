@@ -10,14 +10,14 @@ const setDisableState = () => {
 
 const setDisabledForm = () => {
   setDisableState();
-  adForm.classList.add('ad-form--disabled');
-  mapFilters.classList.add('map__filters--disabled');
+  adForm.classList.toggle('ad-form--disabled');
+  mapFilters.classList.toggle('map__filters--disabled');
 };
 
 const setAktiveForm = () => {
   setDisableState();
-  adForm.classList.remove('ad-form--disabled');
-  mapFilters.classList.remove('map__filters--disabled');
+  adForm.classList.toggle('ad-form--disabled');
+  mapFilters.classList.toggle('map__filters--disabled');
 };
 
 export {setDisabledForm, setAktiveForm};

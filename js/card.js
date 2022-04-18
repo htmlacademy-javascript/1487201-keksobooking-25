@@ -1,6 +1,6 @@
 const cardTemplate = document.querySelector('#card').content.querySelector('.popup');
 
-const showCard =(card) => {
+const showCard = (card) => {
 
   const mapCanvasElement = cardTemplate.cloneNode(true);
 

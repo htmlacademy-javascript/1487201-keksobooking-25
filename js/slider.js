@@ -1,7 +1,8 @@
+import {pristine} from './ad-form.js';
+
 const adForm = document.querySelector('.ad-form');
 const sliderElement = adForm.querySelector('.ad-form__slider');
 const valueElement = adForm.querySelector('#price');
-const typeOfHousing = adForm.querySelector('#type');
 
 noUiSlider.create(sliderElement, {
   range: {
@@ -19,6 +20,7 @@ noUiSlider.create(sliderElement, {
 
 sliderElement.noUiSlider.on('update', () => {
   valueElement.value = sliderElement.noUiSlider.get();
+  pristine.validate();
 });
 
 valueElement.addEventListener('blur', () => {
@@ -29,7 +31,7 @@ valueElement.addEventListener('blur', () => {
 
 if(adForm.classList.contains('ad-form--disabled')) {
 
-  sliderElement.setAttribute('disabled', true);
+  sliderElement.disabled = true;
 
   sliderElement.noUiSlider.updateOptions({
     keyboardSupport: false,

@@ -3,31 +3,34 @@ import {resetFormAndMap} from './ad-form.js';
 
 const body = document.body;
 
-const success = document.querySelector('#success').content.querySelector('.success');
+const success = document.querySelector('#success').content.querySelector('.success').cloneNode(true);
 
-const error = document.querySelector('#error').content.querySelector('.error');
+const error = document.querySelector('#error').content.querySelector('.error').cloneNode(true);
 
-body.appendChild(success);
-success.classList.add('hidden');
+const removeModalWindow = () => {
+  const overlay = document.querySelector('.overlay');
 
-body.appendChild(error);
-error.classList.add('hidden');
+  const onDocumentEscKeyDown = (evt) => {
+    if (isEscapeKey(evt)) {
+      evt.preventDefault();
+      overlay.remove();
+      document.removeEventListener('keydown', onDocumentEscKeyDown);
+    }
+  };
 
+  document.addEventListener('keydown', onDocumentEscKeyDown);
+
+  overlay.addEventListener('click', () => {
+    overlay.remove();
+    document.removeEventListener('keydown', onDocumentEscKeyDown);
+  });
+};
 
 const showModalWindowSuccess =() => {
 
-  success.classList.remove('hidden');
+  body.appendChild(success);
 
-  document.addEventListener('keydown', (evt) => {
-    if (isEscapeKey(evt)) {
-      evt.preventDefault();
-      success.classList.add('hidden');
-    }
-  });
-
-  document.addEventListener('click', () => {
-    success.classList.add('hidden');
-  });
+  removeModalWindow();
 
   resetFormAndMap();
 };
@@ -35,18 +38,9 @@ const showModalWindowSuccess =() => {
 
 const showModalWindowError =() => {
 
-  error.classList.remove('hidden');
+  body.appendChild(error);
 
-  document.addEventListener('keydown', (evt) => {
-    if (isEscapeKey(evt)) {
-      evt.preventDefault();
-      error.classList.add('hidden');
-    }
-  });
-
-  document.addEventListener('click', () => {
-    error.classList.add('hidden');
-  });
+  removeModalWindow();
 };
 
 

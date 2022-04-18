@@ -1,6 +1,9 @@
 import {resetSettingsMap, resetAddress} from './map.js';
 import {request} from './api.js';
 import {sliderElement} from './slider.js';
+import {previewFirst, previewSecond} from './avatar.js';
+
+const PREVIEW_FIRST_STARTING = 'img/muffin-grey.svg';
 
 const adForm = document.querySelector('.ad-form');
 
@@ -12,10 +15,11 @@ const pristine = new Pristine(adForm, {
 });
 
 Pristine.addMessages('ru', {
+
   required: 'Обязательное поле',
+
   minlength: 'Длина текста от 30 до 100 символов',
-  // eslint-disable-next-line no-template-curly-in-string
-  min: 'Минимум ${1}',
+
 });
 
 Pristine.setLocale('ru');
@@ -70,12 +74,13 @@ typeSelect.addEventListener('change', () => {
   priceInput.value = priceInput.min;
 
   sliderElement.noUiSlider.updateOptions({
-    start: priceInput.min,
+    start: parseInt(priceInput.min, 10),
   });
+
+  pristine.validate();
 });
 
-// eslint-disable-next-line prefer-template
-const getMinValue = () => 'Минимум ' + priceInput.min;
+const getMinValue = () => `Минимум ${  priceInput.min}`;
 
 const validateMinPrice = (value) => parseInt(value, 10) >= parseInt(priceInput.min, 10);
 
@@ -86,25 +91,15 @@ const validateMaxPrice = (value) => value <= MAXIMUM_VALUE_PRICE;
 pristine.addValidator(priceInput, validateMaxPrice, 'Максимум 100 000', 2, true);
 
 const timein = adForm.querySelector('#timein');
-const timeinOptions = timein.querySelectorAll('option');
 
 const timeout = adForm.querySelector('#timeout');
-const timeoutOptions = timeout.querySelectorAll('option');
 
 timein.addEventListener('change', () => {
-  timeoutOptions.forEach((item) => {
-    if(timein.value === item.value) {
-      timeout.value = item.value;
-    }
-  });
+  timeout.value = timein.value;
 });
 
 timeout.addEventListener('change', () => {
-  timeinOptions.forEach((item) => {
-    if(timeout.value === item.value) {
-      timein.value = item.value;
-    }
-  });
+  timein.value = timeout.value;
 });
 
 const resetFormAndMap = () => {
@@ -119,12 +114,15 @@ const resetFormAndMap = () => {
   resetAddress();
 
   sliderElement.noUiSlider.set(priceInput.value);
+
+  previewFirst.src = PREVIEW_FIRST_STARTING;
+  previewSecond.innerHTML = '';
 };
 
 const setUserFormSubmit = (onSuccess, onError) => {
   adForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
-    if(pristine.validate()) {
+    if (pristine.validate()) {
 
       request(onSuccess, onError, 'POST', new FormData(evt.target));
 
@@ -139,5 +137,5 @@ adFormReset.addEventListener('click', () => {
   resetFormAndMap();
 });
 
-export {setUserFormSubmit, resetFormAndMap};
+export {setUserFormSubmit, resetFormAndMap, pristine};
 

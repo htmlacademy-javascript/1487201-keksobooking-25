@@ -1,10 +1,12 @@
-import {setDisabledForm, setAktiveForm} from './change-state-page.js';
+import {request} from './api.js';
+import {setAktiveForm} from './change-state-page.js';
 import {filterData} from './filter.js';
-import {debounce} from './util.js';
+import {debounce, onError} from './util.js';
 import {showCard} from './card.js';
 
 const MAX_OFFERS = 10;
 const RERENDER_DELAY = 500;
+const ROUNDING_COORDINATES = 5;
 
 const settingsMap = {
   lat: 35.6894875,
@@ -41,16 +43,7 @@ const mapFilters = document.querySelector('.map__filters');
 
 let adverts = [];
 
-setDisabledForm();
-
-const map = L.map('map-canvas').on('load', () => {
-  setAktiveForm();
-});
-
-map.setView({
-  lat: settingsMap.lat,
-  lng: settingsMap.lng,
-}, settingsMap.zoom);
+const map = L.map('map-canvas');
 
 L.tileLayer(
   settingsMap.tileLayer,
@@ -80,8 +73,9 @@ mainPinMarker.addTo(map);
 
 const address = adForm.querySelector('#address');
 
-const addressValueStarting = `${parseFloat(mainPinMarker.getLatLng().lat.toFixed(5))}, ${parseFloat(mainPinMarker.getLatLng().lng.toFixed(5))}`;
+const transmitsAddressStarting = (location) => `${parseFloat(location.getLatLng().lat.toFixed(ROUNDING_COORDINATES))}, ${parseFloat(location.getLatLng().lng.toFixed(ROUNDING_COORDINATES))}`;
 
+const addressValueStarting = transmitsAddressStarting(mainPinMarker);
 const resetAddress = () => {
   address.value = addressValueStarting;
 };
@@ -89,7 +83,7 @@ const resetAddress = () => {
 resetAddress();
 
 mainPinMarker.on('moveend', (evt) => {
-  address.value = `${parseFloat(evt.target.getLatLng().lat.toFixed(5))}, ${parseFloat(evt.target.getLatLng().lng.toFixed(5))}`;
+  address.value = transmitsAddressStarting(evt.target);
 });
 
 const icon = L.icon({
@@ -128,7 +122,7 @@ const onMapFiltersChange = () => {
 };
 
 
-const getBallons = (arrayCards) => {
+const onSuccess = (arrayCards) => {
 
   adverts = arrayCards.slice();
 
@@ -153,4 +147,14 @@ const resetSettingsMap = () => {
 
 };
 
-export {getBallons, resetSettingsMap, resetAddress};
+map.on('load', () => {
+  setAktiveForm();
+
+  request(onSuccess, onError, 'GET');
+})
+  .setView({
+    lat: settingsMap.lat,
+    lng: settingsMap.lng,
+  }, settingsMap.zoom);
+
+export {resetSettingsMap, resetAddress};

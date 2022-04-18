@@ -1,12 +1,9 @@
-import './ad-form.js';
 import './slider.js';
+import './ad-form.js';
 import './avatar.js';
-import {getBallons} from './map.js';
-import {request} from './api.js';
+import {setDisabledForm} from './change-state-page.js';
 import {showModalWindowSuccess, showModalWindowError} from './modal-windows.js';
 import {setUserFormSubmit} from './ad-form.js';
-import {showAlert} from './util.js';
 
-request(getBallons, showAlert, 'GET');
-
+setDisabledForm();
 setUserFormSubmit(showModalWindowSuccess, showModalWindowError);
