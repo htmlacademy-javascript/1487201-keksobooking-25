@@ -1,5 +1,9 @@
 import {resetSettingsMap, resetAddress} from './map.js';
 import {request} from './api.js';
+import {sliderElement} from './slider.js';
+import {previewFirst, previewSecond} from './avatar.js';
+
+const PREVIEW_FIRST_STARTING = 'img/muffin-grey.svg';
 
 const adForm = document.querySelector('.ad-form');
 
@@ -11,10 +15,11 @@ const pristine = new Pristine(adForm, {
 });
 
 Pristine.addMessages('ru', {
+
   required: 'Обязательное поле',
+
   minlength: 'Длина текста от 30 до 100 символов',
-  // eslint-disable-next-line no-template-curly-in-string
-  min: 'Минимум ${1}',
+
 });
 
 Pristine.setLocale('ru');
@@ -60,43 +65,41 @@ const priceOfHousing = {
   palace: 10000,
 };
 
-// eslint-disable-next-line prefer-template
-const getMinValue = () => 'Минимум ' + priceInput.min;
+typeSelect.addEventListener('change', () => {
+
+  priceInput.placeholder = priceOfHousing[typeSelect.value];
+
+  priceInput.min = priceOfHousing[typeSelect.value];
+
+  priceInput.value = priceInput.min;
+
+  sliderElement.noUiSlider.updateOptions({
+    start: parseInt(priceInput.min, 10),
+  });
+
+  pristine.validate();
+});
+
+const getMinValue = () => `Минимум ${  priceInput.min}`;
 
 const validateMinPrice = (value) => parseInt(value, 10) >= parseInt(priceInput.min, 10);
 
 pristine.addValidator(priceInput, validateMinPrice, getMinValue, 2, true);
-
-typeSelect.addEventListener('change', () => {
-  priceInput.placeholder = priceOfHousing[typeSelect.value];
-  priceInput.min = priceOfHousing[typeSelect.value];
-  pristine.validate();
-});
 
 const validateMaxPrice = (value) => value <= MAXIMUM_VALUE_PRICE;
 
 pristine.addValidator(priceInput, validateMaxPrice, 'Максимум 100 000', 2, true);
 
 const timein = adForm.querySelector('#timein');
-const timeinOptions = timein.querySelectorAll('option');
 
 const timeout = adForm.querySelector('#timeout');
-const timeoutOptions = timeout.querySelectorAll('option');
 
 timein.addEventListener('change', () => {
-  timeoutOptions.forEach((item) => {
-    if(timein.value === item.value) {
-      timeout.value = item.value;
-    }
-  });
+  timeout.value = timein.value;
 });
 
 timeout.addEventListener('change', () => {
-  timeinOptions.forEach((item) => {
-    if(timeout.value === item.value) {
-      timein.value = item.value;
-    }
-  });
+  timein.value = timeout.value;
 });
 
 const resetFormAndMap = () => {
@@ -104,15 +107,22 @@ const resetFormAndMap = () => {
 
   adForm.reset();
 
+  priceInput.min = priceOfHousing[typeSelect.value];
+
   priceInput.value = priceInput.min;
 
   resetAddress();
+
+  sliderElement.noUiSlider.set(priceInput.value);
+
+  previewFirst.src = PREVIEW_FIRST_STARTING;
+  previewSecond.innerHTML = '';
 };
 
 const setUserFormSubmit = (onSuccess, onError) => {
   adForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
-    if(pristine.validate()) {
+    if (pristine.validate()) {
 
       request(onSuccess, onError, 'POST', new FormData(evt.target));
 
@@ -127,5 +137,5 @@ adFormReset.addEventListener('click', () => {
   resetFormAndMap();
 });
 
-export {setUserFormSubmit, resetFormAndMap};
+export {setUserFormSubmit, resetFormAndMap, pristine};
 

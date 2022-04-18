@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <link rel="stylesheet" href="css/normalize.css">
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="nouislider/nouislider.css">
   <link rel="stylesheet" href="leaflet/leaflet.css">
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
   <title>Кексобукинг</title>
@@ -167,7 +168,7 @@
           <label class="ad-form__label">Фотография жилья</label>
           <div class="ad-form__photo-container">
             <div class="ad-form__upload">
-              <input type="file" id="images" name="images" class="ad-form__input visually-hidden">
+              <input type="file" id="images" name="images" class="ad-form__input visually-hidden" accept="image/png, image/jpeg, image/jpg">
               <label for="images" class="ad-form__drop-zone">Загрузить<br>фото...</label>
             </div>
             <div class="ad-form__photo"></div>
@@ -223,14 +224,14 @@
 
   <!-- Сообщение об успешном создании объявления -->
   <template id="success">
-    <div class="success">
+    <div class="success overlay">
       <p class="success__message">Ваше объявление<br>успешно размещено!</p>
     </div>
   </template>
 
   <!-- Сообщение об ошибке создания объявления -->
   <template id="error">
-    <div class="error">
+    <div class="error overlay">
       <p class="error__message">Ошибка размещения объявления</p>
       <button type="button" class="error__button">Попробовать снова</button>
     </div>
