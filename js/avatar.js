@@ -25,7 +25,22 @@ fileChooserSecond.addEventListener('change', () => {
 
   if(mathes) {
     const previewHousingImage = URL.createObjectURL(file);
-    previewSecond.innerHTML = `<img src="${previewHousingImage}" alt="Фотография жилья" width="40" height="44" style = "display: block; margin: 13px auto;">`;
+
+    const photoPreview = document.createElement('img');
+    photoPreview.src = previewHousingImage;
+
+    photoPreview.alt = 'Фотография жилья';
+
+    photoPreview.style.width = '40px';
+
+    photoPreview.style.height = '44px';
+
+    photoPreview.style.display = 'block';
+
+    photoPreview.style.margin = '13px auto';
+
+    previewSecond.append(photoPreview);
+
   }
 });
 
