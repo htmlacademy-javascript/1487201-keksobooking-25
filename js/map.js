@@ -1,5 +1,5 @@
 import {request} from './api.js';
-import {setAktiveForm} from './change-state-page.js';
+import {setActiveForm} from './change-state-page.js';
 import {filterData} from './filter.js';
 import {debounce, onError} from './util.js';
 import {showCard} from './card.js';
@@ -54,7 +54,7 @@ L.tileLayer(
 
 const mainPinIcon = L.icon({
   iconUrl: settingsMainPin.iconUrl,
-  iconSize: [settingsMainPin.iconWidth, settingsMainPin.iconHeyght],
+  iconSize: [settingsMainPin.iconWidth, settingsMainPin.iconHeight],
   iconAnchor: [settingsMainPin.anchorAxisOx, settingsMainPin.anchorAxisOy],
 });
 
@@ -88,7 +88,7 @@ mainPinMarker.on('moveend', (evt) => {
 
 const icon = L.icon({
   iconUrl: settingsPin.iconUrl,
-  iconSize: [settingsPin.iconWidth, settingsPin.iconHeyght],
+  iconSize: [settingsPin.iconWidth, settingsPin.iconHeight],
   iconAnchor: [settingsPin.anchorAxisOx, settingsPin.anchorAxisOy],
 });
 
@@ -148,7 +148,7 @@ const resetSettingsMap = () => {
 };
 
 map.on('load', () => {
-  setAktiveForm();
+  setActiveForm();
 
   request(onSuccess, onError, 'GET');
 })
@@ -157,4 +157,4 @@ map.on('load', () => {
     lng: settingsMap.lng,
   }, settingsMap.zoom);
 
-export {resetSettingsMap, resetAddress};
+export {resetSettingsMap, resetAddress, onMapFiltersChange};

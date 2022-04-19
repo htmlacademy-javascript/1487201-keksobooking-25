@@ -14,10 +14,10 @@ const setDisabledForm = () => {
   mapFilters.classList.toggle('map__filters--disabled');
 };
 
-const setAktiveForm = () => {
+const setActiveForm = () => {
   setDisableState();
   adForm.classList.toggle('ad-form--disabled');
   mapFilters.classList.toggle('map__filters--disabled');
 };
 
-export {setDisabledForm, setAktiveForm};
+export {setDisabledForm, setActiveForm};
