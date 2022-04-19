@@ -1,14 +1,15 @@
-import {resetSettingsMap, resetAddress, onMapFiltersChange} from './map.js';
+import {resetSettingsMap, resetAddress, resetMap} from './map.js';
 import {request} from './api.js';
 import {sliderElement} from './slider.js';
 import {previewFirst, previewSecond} from './avatar.js';
-import {DEFAULT_VALUE, filters} from './filter.js';
 
 const MAXIMUM_VALUE_PRICE = 100000;
 
 const PREVIEW_FIRST_STARTING = 'img/muffin-grey.svg';
 
 const adForm = document.querySelector('.ad-form');
+
+const filterForm = document.querySelector('.map__filters');
 
 const pristine = new Pristine(adForm, {
   classTo: 'validation-check',
@@ -119,11 +120,10 @@ const resetFormAndMap = () => {
   previewFirst.src = PREVIEW_FIRST_STARTING;
   previewSecond.innerHTML = '';
 
-  filters.forEach((filter) => {
-    filter.value = DEFAULT_VALUE;
-  });
+  filterForm.reset();
 
-  onMapFiltersChange();
+  resetMap();
+
 };
 
 const setUserFormSubmit = (onSuccess, onError) => {
