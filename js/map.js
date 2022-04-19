@@ -121,6 +121,10 @@ const onMapFiltersChange = () => {
   createMarkerGroup(filterData(adverts));
 };
 
+const resetMap = () => {
+  markerGroup.clearLayers();
+  createMarkerGroup(adverts.slice(0, MAX_OFFERS));
+};
 
 const onSuccess = (arrayCards) => {
 
@@ -157,4 +161,4 @@ map.on('load', () => {
     lng: settingsMap.lng,
   }, settingsMap.zoom);
 
-export {resetSettingsMap, resetAddress, onMapFiltersChange};
+export {resetSettingsMap, resetAddress, resetMap};

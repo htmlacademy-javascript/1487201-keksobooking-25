@@ -58,4 +58,4 @@ const filterData = (data) => {
   return filteredOffers;
 };
 
-export{filterData, filters, DEFAULT_VALUE};
+export{filterData};
